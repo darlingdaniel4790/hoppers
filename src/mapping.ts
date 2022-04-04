@@ -1,110 +1,79 @@
-import { BigInt } from "@graphprotocol/graph-ts"
+import { BigInt, log } from "@graphprotocol/graph-ts";
 import {
-  hoppers,
-  Approval,
-  ApprovalForAll,
-  LevelUp,
-  NameChange,
-  OwnerUpdated,
-  Rebirth,
+  // hoppers,
+  // Approval,
+  // ApprovalForAll,
+  // LevelUp,
+  // NameChange,
+  // OwnerUpdated,
+  // Rebirth,
   Transfer,
-  UnlabeledData,
-  UpdatedNameFee
+  // UnlabeledData,
+  // UpdatedNameFee
 } from "../generated/hoppers/hoppers"
-import { ExampleEntity } from "../generated/schema"
+import { Hopper } from "../generated/schema"
 
-export function handleApproval(event: Approval): void {
-  // Entities can be loaded from the store using a string ID; this ID
-  // needs to be unique across all entities of the same type
-  let entity = ExampleEntity.load(event.transaction.from.toHex())
+// export function handleApproval(event: Approval): void {}
 
-  // Entities only exist after they have been saved to the store;
-  // `null` checks allow to create entities on demand
-  if (!entity) {
-    entity = new ExampleEntity(event.transaction.from.toHex())
+// export function handleApprovalForAll(event: ApprovalForAll): void {}
 
-    // Entity fields can be set using simple assignments
-    entity.count = BigInt.fromI32(0)
+// export function handleLevelUp(event: LevelUp): void {}
+
+// export function handleNameChange(event: NameChange): void {}
+
+// export function handleOwnerUpdated(event: OwnerUpdated): void {}
+
+// export function handleRebirth(event: Rebirth): void {}
+
+const CONTRACT_ADDRESSES = [
+  "0x85e66216fB0e80F87b54eb39a415c3bbD40E37f9",
+  "0x780feb71117157a039e682668d79584d18579e90",
+  "0xec7e923e7e0bd2dc7bb2ac0fabccf4e650c5418c",
+  "0x4eef52b71bd64d54d736cf2f3073e6dbbfcc7e31",
+  "0xcd32ed513a86484688cd3dbada05a9ed3c0c0eb6",
+  "0x1009cba3c0a50a2a0e8a92bc070ac5ffb8a3efe2",
+   "0x16d5791f7c31d7e13dd7b18ae2011764c4da8fbc",
+   "0xbbF9287aFbf1CdBf9f7786E98fC6CEa73A78B6aB",
+];
+
+export function handleTransfer(event: Transfer): void {
+  if(event.params.id== BigInt.fromString("0"))
+  return
+  let hopper = new Hopper(event.params.id.toHexString())
+  hopper.token_id = event.params.id
+
+  // if("0x0000000000000000000000000000000000000000"== event.params.from.toHexString()){
+  //   // minting operation
+  //   log.info("FOUND MINTING!",[])
+  //     hopper.location=event.params.to // user's address
+  //     hopper.owner=event.params.to  // user's address
+  //     return
+  // }
+  
+  // from adventure
+  for(let a=0;a<CONTRACT_ADDRESSES.length;a++){
+    // user unstaking from adventure
+    if(CONTRACT_ADDRESSES[a] == event.params.from.toHexString()){
+      log.info("FOUND UNSTAKING!",[])
+      hopper.location=event.params.to // user's address
+      hopper.owner=event.params.to  // user's address
+      break
+    }
+  }
+  // to adventure
+  for(let a=0;a<CONTRACT_ADDRESSES.length;a++){
+    // user staking from adventure
+    if(CONTRACT_ADDRESSES[a] == event.params.to.toHexString()){
+      log.info("FOUND STAKING!",[])
+      hopper.location=event.params.to // user's address
+      hopper.owner=event.params.from  // user's address
+      break
+    }
   }
 
-  // BigInt and BigDecimal math are supported
-  entity.count = entity.count + BigInt.fromI32(1)
-
-  // Entity fields can be set based on event parameters
-  entity.owner = event.params.owner
-  entity.spender = event.params.spender
-
-  // Entities can be written to the store with `.save()`
-  entity.save()
-
-  // Note: If a handler doesn't require existing field values, it is faster
-  // _not_ to load the entity from the store. Instead, create it fresh with
-  // `new Entity(...)`, set the fields that should be updated and save the
-  // entity back to the store. Fields that were not set or unset remain
-  // unchanged, allowing for partial updates to be applied.
-
-  // It is also possible to access smart contracts from mappings. For
-  // example, the contract that has emitted the event can be connected to
-  // with:
-  //
-  // let contract = Contract.bind(event.address)
-  //
-  // The following functions can then be called on this contract to access
-  // state variables and other data:
-  //
-  // - contract.LEGENDARY_ID_START(...)
-  // - contract.MAX_PER_ADDRESS(...)
-  // - contract.MAX_SUPPLY(...)
-  // - contract.MINT_COST(...)
-  // - contract.WL_MINT_COST(...)
-  // - contract._jsonString(...)
-  // - contract.balanceOf(...)
-  // - contract.baseURI(...)
-  // - contract.changeHopperName(...)
-  // - contract.freeMerkleRoot(...)
-  // - contract.freeRedeemed(...)
-  // - contract.getApproved(...)
-  // - contract.getData(...)
-  // - contract.getGlobalData(...)
-  // - contract.getHopper(...)
-  // - contract.getHopperName(...)
-  // - contract.getHopperWithData(...)
-  // - contract.hopperMaxAttributeValue(...)
-  // - contract.hoppers(...)
-  // - contract.hoppersLength(...)
-  // - contract.hoppersNames(...)
-  // - contract.imageURL(...)
-  // - contract.indexer(...)
-  // - contract.isApprovedForAll(...)
-  // - contract.name(...)
-  // - contract.nameFee(...)
-  // - contract.owner(...)
-  // - contract.ownerOf(...)
-  // - contract.preSaleOpenTime(...)
-  // - contract.reserved(...)
-  // - contract.supportsInterface(...)
-  // - contract.symbol(...)
-  // - contract.takenNames(...)
-  // - contract.tokenURI(...)
-  // - contract.unlabeledData(...)
-  // - contract.unlabeledGlobalData(...)
-  // - contract.wlMerkleRoot(...)
-  // - contract.wlRedeemed(...)
-  // - contract.zones(...)
+  hopper.save()
 }
 
-export function handleApprovalForAll(event: ApprovalForAll): void {}
+// export function handleUnlabeledData(event: UnlabeledData): void {}
 
-export function handleLevelUp(event: LevelUp): void {}
-
-export function handleNameChange(event: NameChange): void {}
-
-export function handleOwnerUpdated(event: OwnerUpdated): void {}
-
-export function handleRebirth(event: Rebirth): void {}
-
-export function handleTransfer(event: Transfer): void {}
-
-export function handleUnlabeledData(event: UnlabeledData): void {}
-
-export function handleUpdatedNameFee(event: UpdatedNameFee): void {}
+// export function handleUpdatedNameFee(event: UpdatedNameFee): void {}

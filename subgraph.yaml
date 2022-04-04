@@ -1,4 +1,4 @@
-specVersion: 0.0.1
+specVersion: 0.0.2
 schema:
   file: ./schema.graphql
 dataSources:
@@ -8,40 +8,33 @@ dataSources:
     source:
       address: "0x4245a1bd84eb5f3ebc115c2edf57e50667f98b0b"
       abi: hoppers
+      startBlock: 11963376
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.5
       language: wasm/assemblyscript
       entities:
-        - Approval
-        - ApprovalForAll
-        - LevelUp
-        - NameChange
-        - OwnerUpdated
-        - Rebirth
-        - Transfer
-        - UnlabeledData
-        - UpdatedNameFee
+        - Hopper
       abis:
         - name: hoppers
           file: ./abis/hoppers.json
       eventHandlers:
-        - event: Approval(indexed address,indexed address,indexed uint256)
-          handler: handleApproval
-        - event: ApprovalForAll(indexed address,indexed address,bool)
-          handler: handleApprovalForAll
-        - event: LevelUp(uint256)
-          handler: handleLevelUp
-        - event: NameChange(uint256)
-          handler: handleNameChange
-        - event: OwnerUpdated(indexed address)
-          handler: handleOwnerUpdated
-        - event: Rebirth(uint256)
-          handler: handleRebirth
+        # - event: Approval(indexed address,indexed address,indexed uint256)
+        #   handler: handleApproval
+        # - event: ApprovalForAll(indexed address,indexed address,bool)
+        #   handler: handleApprovalForAll
+        # - event: LevelUp(uint256)
+        #   handler: handleLevelUp
+        # - event: NameChange(uint256)
+        #   handler: handleNameChange
+        # - event: OwnerUpdated(indexed address)
+        #   handler: handleOwnerUpdated
+        # - event: Rebirth(uint256)
+        #   handler: handleRebirth
         - event: Transfer(indexed address,indexed address,indexed uint256)
           handler: handleTransfer
-        - event: UnlabeledData(string,uint256)
-          handler: handleUnlabeledData
-        - event: UpdatedNameFee(uint256)
-          handler: handleUpdatedNameFee
+        # - event: UnlabeledData(string,uint256)
+        #   handler: handleUnlabeledData
+        # - event: UpdatedNameFee(uint256)
+        #   handler: handleUpdatedNameFee
       file: ./src/mapping.ts
