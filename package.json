@@ -1,0 +1,16 @@
+{
+  "name": "hoppers-game",
+  "license": "UNLICENSED",
+  "scripts": {
+    "codegen": "graph codegen",
+    "build": "graph build",
+    "deploy": "graph deploy --node https://api.thegraph.com/deploy/ darlingdaniel4790/hoppers-game",
+    "create-local": "graph create --node http://localhost:8020/ darlingdaniel4790/hoppers-game",
+    "remove-local": "graph remove --node http://localhost:8020/ darlingdaniel4790/hoppers-game",
+    "deploy-local": "graph deploy --node http://localhost:8020/ --ipfs http://localhost:5001 darlingdaniel4790/hoppers-game"
+  },
+  "dependencies": {
+    "@graphprotocol/graph-cli": "0.29.0",
+    "@graphprotocol/graph-ts": "0.26.0"
+  }
+}
