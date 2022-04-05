@@ -1,6 +1,7 @@
 type Hopper @entity {
-  id: ID!
   token_id: BigInt!
   owner: Bytes! # address
   location: Bytes! # address
+  transaction: Bytes
+  id: ID!
 }

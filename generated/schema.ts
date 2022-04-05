@@ -37,15 +37,6 @@ export class Hopper extends Entity {
     return changetype<Hopper | null>(store.get("Hopper", id));
   }
 
-  get id(): string {
-    let value = this.get("id");
-    return value!.toString();
-  }
-
-  set id(value: string) {
-    this.set("id", Value.fromString(value));
-  }
-
   get token_id(): BigInt {
     let value = this.get("token_id");
     return value!.toBigInt();
@@ -71,5 +62,31 @@ export class Hopper extends Entity {
 
   set location(value: Bytes) {
     this.set("location", Value.fromBytes(value));
+  }
+
+  get transaction(): Bytes | null {
+    let value = this.get("transaction");
+    if (!value || value.kind == ValueKind.NULL) {
+      return null;
+    } else {
+      return value.toBytes();
+    }
+  }
+
+  set transaction(value: Bytes | null) {
+    if (!value) {
+      this.unset("transaction");
+    } else {
+      this.set("transaction", Value.fromBytes(<Bytes>value));
+    }
+  }
+
+  get id(): string {
+    let value = this.get("id");
+    return value!.toString();
+  }
+
+  set id(value: string) {
+    this.set("id", Value.fromString(value));
   }
 }
