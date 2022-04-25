@@ -5,3 +5,10 @@ type Hopper @entity {
   transaction: Bytes
   id: ID!
 }
+type Tadpole @entity {
+  token_id: BigInt!
+  owner: Bytes! # address
+  location: Bytes! # address
+  transaction: Bytes
+  id: ID!
+}

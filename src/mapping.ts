@@ -7,11 +7,12 @@ import {
   // NameChange,
   // OwnerUpdated,
   // Rebirth,
-  Transfer,
+  Transfer as HopperTransfer,
   // UnlabeledData,
   // UpdatedNameFee
 } from "../generated/hoppers/hoppers"
-import { Hopper } from "../generated/schema"
+import {Transfer as TadpoleTransfer} from "../generated/tadpoles/tadpoles"
+import { Hopper, Tadpole } from "../generated/schema"
 
 // export function handleApproval(event: Approval): void {}
 
@@ -36,13 +37,9 @@ import { Hopper } from "../generated/schema"
 //    "0xbbF9287aFbf1CdBf9f7786E98fC6CEa73A78B6aB",
 // ];
 
-export function handleTransfer(event: Transfer): void {
+export function handleHopperTransfer(event: HopperTransfer): void {
   if(event.params.id== BigInt.fromString("0"))
   return
-
-  if(event.transaction.hash == Bytes.fromHexString("0x9b870fd872e4c407a8fb98d3b2feda94424045fc612a5c76f606237ba77f7398")){
-    log.warning("Here's the problem {}",[event.params.to.toHexString()])
-  }
   let to = event.params.to
   let from = event.params.from
   let hopper = new Hopper(event.params.id.toHex())
@@ -71,6 +68,22 @@ export function handleTransfer(event: Transfer): void {
   // }
 
   hopper.save()
+}
+
+export function handleTadpoleTransfer(event: TadpoleTransfer): void {
+  if(event.params.id== BigInt.fromString("0"))
+  return
+  let to = event.params.to
+  let from = event.params.from
+  let tadpole = new Tadpole(event.params.id.toHex())
+  tadpole.token_id = event.params.id
+  tadpole.location= to
+  tadpole.owner= (
+    "0xbbf9287afbf1cdbf9f7786e98fc6cea73a78b6ab" == to.toHexString()
+    ) ? from : to 
+  tadpole.transaction = event.transaction.hash
+
+  tadpole.save()
 }
 
 // export function handleUnlabeledData(event: UnlabeledData): void {}

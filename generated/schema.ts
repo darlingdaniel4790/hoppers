@@ -90,3 +90,83 @@ export class Hopper extends Entity {
     this.set("id", Value.fromString(value));
   }
 }
+
+export class Tadpole extends Entity {
+  constructor(id: string) {
+    super();
+    this.set("id", Value.fromString(id));
+
+    this.set("token_id", Value.fromBigInt(BigInt.zero()));
+    this.set("owner", Value.fromBytes(Bytes.empty()));
+    this.set("location", Value.fromBytes(Bytes.empty()));
+  }
+
+  save(): void {
+    let id = this.get("id");
+    assert(id != null, "Cannot save Tadpole entity without an ID");
+    if (id) {
+      assert(
+        id.kind == ValueKind.STRING,
+        `Entities of type Tadpole must have an ID of type String but the id '${id.displayData()}' is of type ${id.displayKind()}`
+      );
+      store.set("Tadpole", id.toString(), this);
+    }
+  }
+
+  static load(id: string): Tadpole | null {
+    return changetype<Tadpole | null>(store.get("Tadpole", id));
+  }
+
+  get token_id(): BigInt {
+    let value = this.get("token_id");
+    return value!.toBigInt();
+  }
+
+  set token_id(value: BigInt) {
+    this.set("token_id", Value.fromBigInt(value));
+  }
+
+  get owner(): Bytes {
+    let value = this.get("owner");
+    return value!.toBytes();
+  }
+
+  set owner(value: Bytes) {
+    this.set("owner", Value.fromBytes(value));
+  }
+
+  get location(): Bytes {
+    let value = this.get("location");
+    return value!.toBytes();
+  }
+
+  set location(value: Bytes) {
+    this.set("location", Value.fromBytes(value));
+  }
+
+  get transaction(): Bytes | null {
+    let value = this.get("transaction");
+    if (!value || value.kind == ValueKind.NULL) {
+      return null;
+    } else {
+      return value.toBytes();
+    }
+  }
+
+  set transaction(value: Bytes | null) {
+    if (!value) {
+      this.unset("transaction");
+    } else {
+      this.set("transaction", Value.fromBytes(<Bytes>value));
+    }
+  }
+
+  get id(): string {
+    let value = this.get("id");
+    return value!.toString();
+  }
+
+  set id(value: string) {
+    this.set("id", Value.fromString(value));
+  }
+}
